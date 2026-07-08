@@ -7,7 +7,7 @@ function LayoutB({
   children: React.ReactNode;
 }>) {
   return (
-    <div className='w-dvw h-dvh flex'>
+    <div className='w-dvw h-dvh flex' suppressHydrationWarning>
       <div className='w-1/2 h-full bg-green-950  p-8'>
         <h2 className="text-green-50 text-xl font-bold ">My Sacco</h2>
 
