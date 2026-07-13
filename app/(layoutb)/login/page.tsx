@@ -1,30 +1,68 @@
+'use client'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
+import { EyeClosed, EyeIcon } from 'lucide-react'
 import Link from 'next/link'
-import React from 'react'
+import { redirect } from 'next/navigation'
+import { useState } from 'react'
+import { toast } from 'sonner'
 
 const LoginPage = () => {
+  const [showPassword,setShowPassword]=useState<boolean>(false);
+  const [password, setPassword]=useState('');
+  const [email, setEmail]=useState('');
+  const toggleView=()=>{
+    setShowPassword((prev)=>!prev)
+  }
+  const handleSubmit=async(e)=>{
+    e.preventDefault();
+    try {
+    const data={email, password};
+
+    // const res=await userLogin(data).unwrap(); res success=true/false
+    const res={success:true,data:{username:"john"}}
+
+    if(res.success){
+      toast.success("Loggin successful")
+// save the user details
+      redirect('/dashboard')
+    }else{
+      toast.warning("Check email or password")
+    }
+
+
+    } catch (error) {
+      toast.error("Something went wrong")
+    }
+  }
   return (
     <div className='flex flex-col items-center gap-2 w-full max-w-100'>
       <h1 className='font-bold text-2xl text-green-50'> Login to your account</h1>
       <p className='text-green-100'>Enter your email below to login to your account</p>
-      <div className='w-full flex flex-col gap-8 py-4'>
+      <form className='w-full flex flex-col gap-8 py-4' onSubmit={handleSubmit}>
         <div className='flex flex-col gap-2'>
           <Label className='text-green-100 font-bold'>Email</Label>
-          <Input type='email' required placeholder='m@example.com' className='text-green-100'/>
+          <Input type='email' value={email} onChange={(e)=>setEmail(e.target.value)} required placeholder='m@example.com' className='text-green-100'/>
         </div>
         <div  className='flex flex-col gap-2'>
           <div className='flex items-center justify-between flex-1'>
             <Label  className='text-green-100 font-bold'>Password</Label>
             <Link href={"/forgot-password"}  className='text-green-100 font-semibold text-xs hover:underline'>Forgot your password?</Link>
           </div>
-          <Input type='password' placeholder='*******' required  className='text-green-100'/>
+          <div className='relative w-full'>
+
+          <Input type={showPassword? 'text' : 'password'} value={password} onChange={(e)=>setPassword(e.target.value)} placeholder='*******' required  className='text-green-100'/>
+          <button className='absolute right-2 top-1 cursor-pointer' onClick={toggleView}>
+            
+            {showPassword ? <EyeIcon className='text-green-100  ' size={20}/> : <EyeClosed className='text-green-100  ' size={20}/>}
+            </button>
+          </div>
         </div>
 
         <Button variant={"secondary"}>Login</Button>
-      </div>
+      </form>
       <Separator/>
       <p className='text-green-100 text-xs'>Don't have an account? <Link href={"/register"} className='underline hover:text-green-50'>Register</Link> </p>
 

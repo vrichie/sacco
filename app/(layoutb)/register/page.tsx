@@ -14,10 +14,10 @@ const RegisterPage = () => {
   const [password,setPassword]=useState<string>('');
   const [confirmPassword,setConfirmPassword]=useState<string>('');
   const [errorMsg,setErrorMsg]=useState<null|string>(null)
+  const [errorMsgFname,setErrorMsgFname]=useState<null|string>(null)
 
 
   const handleSubmit=(e)=>{
-
     try {
       e.preventDefault()
       console.log("submitted")
@@ -26,10 +26,12 @@ const RegisterPage = () => {
         fName,lName,email,password,confirmPassword
       }
      console.log(data)
-      // check if name is less 3 
+     if(fName.length<3){setErrorMsgFname("Name is too short"); return;}
+
       if(password!=confirmPassword){
         setErrorMsg("Password does not match")
         toast("Password does not match")
+        return;
       }
     } catch (error) {
       toast("Something went wrong")
@@ -37,12 +39,8 @@ const RegisterPage = () => {
        setErrorMsg(null)
     }
 
-
   }
 
-//  null === false
-//  '' ==== false
-//  "sdhf " === true
   return (
     <div className='flex flex-col items-center gap-2 w-full max-w-100'>
       <h1 className='font-bold text-2xl text-green-50'>Create your account</h1>
@@ -54,6 +52,7 @@ const RegisterPage = () => {
         <div className='flex flex-col gap-2'>
           <Label className='text-green-100 font-bold'>First Name</Label>
           <Input onChange={(e)=>setFName(e.target.value)} type='text' required placeholder='John' className='text-green-100' value={fName}/>
+          {errorMsgFname && <p className='text-red-400'> {errorMsgFname}</p>}
         </div>
          <div className='flex flex-col gap-2'>
           <Label className='text-green-100 font-bold'>Last Name</Label>

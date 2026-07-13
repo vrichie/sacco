@@ -8,12 +8,12 @@ function LayoutB({
 }>) {
   return (
     <div className='w-dvw h-dvh flex' suppressHydrationWarning>
-      <div className='w-1/2 h-full bg-green-950  p-8'>
+      <div className='w-full md:w-1/2 h-full bg-green-950 md:text-left text-center p-8'>
         <h2 className="text-green-50 text-xl font-bold ">My Sacco</h2>
 
         <div className='flex-1 w-full h-full  py-4 flex items-center justify-center'> {children}</div>
       </div>
-      <div className='w-1/2 h-full relative'>
+      <div className='w-1/2 h-full relative hidden md:flex'>
       <Image src="/hero-bg2.jpg" fill alt="saving" className='object-cover object-center'/>
       </div>
     </div>

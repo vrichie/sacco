@@ -23,15 +23,15 @@ export const Footer=()=>{
     return(
          <footer className="bg-green-950 p-8">
            
-           <div className="w-full max-w-6xl mx-auto grid grid-cols-2 gap-8">
-            <div>
+           <div className="w-full max-w-6xl mx-auto grid md:grid-cols-2 grid-cols-1 gap-8">
+            <div className="w-full">
                 <h2 className="text-xl font-bold text-green-50">My Sacco</h2>
                 <p className="text-green-100">
                     We are a Savings and Credit Society headquartered in Njoro and with over 30,000 members drawn from varied professions and statuses.
                 </p>  
             </div>
 
-            <div>
+            <div className="w-full">
                 <h2 className="text-lg font-bold text-green-50">Important Links</h2>
                        <div className="flex flex-col gap-2">
                         {
@@ -44,7 +44,7 @@ export const Footer=()=>{
                        </div>
             </div>
 
-            <div className="border-t-2 col-span-2 text-center">
+            <div className="border-t-2 md:col-span-2 text-center">
                 <p className="pt-2 text-green-200 text-xs">
 
                 Copyright © {year} My Sacco

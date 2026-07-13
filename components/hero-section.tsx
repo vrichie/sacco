@@ -5,7 +5,7 @@ export const HeroSection=()=>{
         <div className="w-full h-[70dvh] " id="hero-section">
             <div className="w-full h-full bg-black/50 p-8 flex items-center justify-center">
                 <div className="w-full max-w-6xl">
-<div className=" w-100 flex flex-col gap-4">
+                <div className=" md:w-100 flex flex-col gap-4">
                     <h1 className="text-4xl font-bold text-green-50">
                         The Comrade Sacco
                     </h1>

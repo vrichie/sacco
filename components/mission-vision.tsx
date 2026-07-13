@@ -36,7 +36,7 @@ const MissionVision = () => {
 
   <div className='w-full max-w-6xl flex gap-10 mx-auto'>
 
-        <div className='w-full flex gap-10 -mt-32'>
+        <div className='w-full flex md:flex-row flex-col gap-10 -mt-32'>
             {
             missions?.map((item:Mission,index:number)=>(
                 <Card className='flex-1 bg-linear-to-b from-green-700 to-green-500 gap-8' key={index}>
