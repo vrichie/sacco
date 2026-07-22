@@ -5,7 +5,7 @@ import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import { EyeClosed, EyeIcon } from 'lucide-react'
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -13,6 +13,7 @@ const LoginPage = () => {
   const [showPassword,setShowPassword]=useState<boolean>(false);
   const [password, setPassword]=useState('');
   const [email, setEmail]=useState('');
+  const router=useRouter()
   const toggleView=()=>{
     setShowPassword((prev)=>!prev)
   }
@@ -21,15 +22,22 @@ const LoginPage = () => {
     try {
     const data={email, password};
 
-    // const res=await userLogin(data).unwrap(); res success=true/false
-    const res={success:true,data:{username:"john"}}
+    const res= await fetch("http://localhost:8000/api/v1/auth",{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(data)
+    })
+    const resData=await res.json()
+     if(res.ok){
+      toast.success(resData?.message || "Loggin successful")
+      const userData=JSON.stringify(resData.data)
+      localStorage.setItem("user",userData)
+      router.push('/dashboard')
 
-    if(res.success){
-      toast.success("Loggin successful")
-// save the user details
-      redirect('/dashboard')
     }else{
-      toast.warning("Check email or password")
+      toast.warning(resData?.message || "Check email or password")
     }
 
 

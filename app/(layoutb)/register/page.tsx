@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Separator } from '@/components/ui/separator'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { toast } from 'sonner'
 
@@ -11,30 +12,51 @@ const RegisterPage = () => {
   const [fName,setFName]=useState<string>('');
   const [lName,setLName]=useState<string>('');
   const [email,setEmail]=useState<string>('');
+  const [phone,setPhone]=useState<string>('');
   const [password,setPassword]=useState<string>('');
   const [confirmPassword,setConfirmPassword]=useState<string>('');
   const [errorMsg,setErrorMsg]=useState<null|string>(null)
   const [errorMsgFname,setErrorMsgFname]=useState<null|string>(null)
+  const router = useRouter()
 
-
-  const handleSubmit=(e)=>{
+  const handleSubmit=async(e)=>{
     try {
       e.preventDefault()
       console.log("submitted")
 
       const data = {
-        fName,lName,email,password,confirmPassword
+        firstName:fName,
+        lastName:lName,
+        email,
+        phone,
+        password
       }
-     console.log(data)
-     if(fName.length<3){setErrorMsgFname("Name is too short"); return;}
-
       if(password!=confirmPassword){
         setErrorMsg("Password does not match")
         toast("Password does not match")
         return;
       }
+      const res= await fetch("http://localhost:8000/api/v1/auth/register",{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        body:JSON.stringify(data)
+      })
+      const resData=await res.json()
+      if(res.ok){
+        toast.success(resData?.message || "Account created successfully")
+        const userData = JSON.stringify(resData.data)
+        localStorage.setItem("user",userData)
+        router.push('/dashboard')
+      }else{
+        toast.error(resData?.message || "Check your details")
+      }
+
+
     } catch (error) {
-      toast("Something went wrong")
+      console.log(error)
+      toast("Something went wrong, try again later")
     } finally{
        setErrorMsg(null)
     }
@@ -58,11 +80,18 @@ const RegisterPage = () => {
           <Label className='text-green-100 font-bold'>Last Name</Label>
           <Input type='text' required placeholder='Doe' onChange={(e)=>setLName(e.target.value)} value={lName} className='text-green-100'/>
         </div>
+
          <div className='flex flex-col gap-2'>
             <Label className='text-green-100 font-bold'>Email</Label>
             <Input type='email' required placeholder='m@example.com' className='text-green-100' onChange={(e)=>setEmail(e.target.value)} value={email}/>
-            <p className='text-green-100 text-xs'>We'll use this to contact you. We will not share your email with anyone else.</p>
         </div>
+
+        <div className='flex flex-col gap-2'>
+            <Label className='text-green-100 font-bold'>Phone</Label>
+            <Input type='text' placeholder='0700000000' className='text-green-100' onChange={(e)=>setPhone(e.target.value)} value={phone}/>
+           
+        </div>
+
         <div  className='flex flex-col gap-2'>
             <Label  className='text-green-100 font-bold'>Password</Label>
           <Input type='password' placeholder='*******' required onChange={(e)=>setPassword(e.target.value)} value={password} className='text-green-100'/>
